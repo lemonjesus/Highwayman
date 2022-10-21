@@ -1,0 +1,8 @@
+development:
+  primary:
+    adapter: postgresql
+    host: tiles
+    port: 5432
+    user: renderer
+    password: renderer
+    database: gis

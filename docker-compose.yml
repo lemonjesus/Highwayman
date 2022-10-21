@@ -1,0 +1,24 @@
+version: "3.3"
+
+services:
+  tiles:
+    image: overv/openstreetmap-tile-server
+    command: run
+    ports:
+      - "8080:80"
+      - "5432:5432"
+    volumes:
+      - osm-data:/data/database/
+  app:
+    image: ruby
+    command: ruby app.rb
+    working_dir: /app
+    depends_on:
+      - tiles
+    ports:
+      - 3081:3081
+    volumes:
+      - .:/app
+
+volumes:
+  osm-data:
