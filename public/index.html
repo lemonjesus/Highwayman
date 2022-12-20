@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js" integrity="sha512-tWHlutFnuG0C6nQRlpvrEhE4QpkG1nn2MOUMWmUeRePl4e3Aki0VB6W1v3oLjFtd0hVOtRQ9PHpSfN6u6/QXkQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Highway Man</title>
+
+    <style>
+      @keyframes toolpane-grow {
+        from {width: 0%;}
+        to {width: 25%;}
+      }
+
+      @keyframes map-shrink {
+        from {width: 100%;}
+        to {width: 75%;}
+      }
+
+      @keyframes toolpane-shrink {
+        from {width: 25%;}
+        to {width: 0%;}
+      }
+
+      @keyframes map-grow {
+        from {width: 75%;}
+        to {width: 100%;}
+      }
+
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+      #map-container {
+        height: calc(100vh - 36px);
+      }
+      #menu-container {
+        height: 36px;
+      }
+      #toolpane-container {
+        display: none;
+      }
+      .pure-u-0 {
+        animation: toolpane-shrink 0.5s ease-out;
+      }
+      .pure-u-1-animated {
+        animation: map-grow 0.5s ease-out;
+      }
+      .pure-u-1-4 {
+        animation: toolpane-grow 0.5s ease-out;
+      }
+      .pure-u-3-4 {
+        animation: map-shrink 0.5s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pure-g">
+      <div class="pure-u-1" id="menu-container">
+        <div class="pure-menu pure-menu-horizontal">
+          <ul class="pure-menu-list">
+            <li class="pure-menu-item">
+              <b style="padding: 0.5em 1em;">Highway Man</b>
+            </li>
+            <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+              <a href="#" class="pure-menu-link">Add Route</a>
+              <ul class="pure-menu-children">
+                <li class="pure-menu-item">
+                  <a href="#" class="pure-menu-link" id="add-item-start-end" onclick="showToolpane('start-end-point')">Start/End Point</a>
+                </li>
+                <li class="pure-menu-item">
+                  <a href="#" class="pure-menu-link" id="add-item-gps-upload" onclick="showToolpane('upload-gps-track')">Upload GPS Track</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div id="toolpane-container">
+        <div id="start-end-point">Start End Point</div>
+        <div id="upload-gps-track">Upload GPS Track</div>
+      </div>
+      <div class="pure-u-1" id="map-container"><div id="map"></div></div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDizZ4ZDRs3iDGdzaMFQ4iclCObho1hYiE&callback=initMap&v=weekly" defer></script>
+    <script>
+      let map;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 39.8283, lng: -90.5795 },
+          zoom: 5,
+        });
+
+        // fit america in the map
+        var southWest = new google.maps.LatLng(24.258920,-126.815472);
+        var northEast = new google.maps.LatLng(48.369794,-60.915421)
+        var bounds = new google.maps.LatLngBounds(southWest,northEast);
+        map.fitBounds(bounds);
+      }
+
+      window.initMap = initMap;
+
+      function showToolpane(tool) {
+        $("#map-container").removeClass("pure-u-1").addClass("pure-u-3-4");
+        $("#toolpane-container").show().removeClass("pure-u-0").addClass("pure-u-1-4");
+        $("#toolpane-container").children().hide();
+        $(`#${tool}`).show();
+      }
+
+      function hideToolpane() {
+        $("#map-container").removeClass("pure-u-3-4").addClass("pure-u-1").addClass("pure-u-1-animated");
+        $("#toolpane-container").removeClass("pure-u-1-4").addClass("pure-u-0");
+      }
+    </script>
+  </body>
+</html>
