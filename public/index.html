@@ -8,8 +8,8 @@
 
     <style>
       @keyframes toolpane-grow {
-        from {width: 0%;}
-        to {width: 25%;}
+        from {width: 0%; display: none;}
+        to {width: 25%; display: block;}
       }
 
       @keyframes map-shrink {
@@ -18,13 +18,13 @@
       }
 
       @keyframes toolpane-shrink {
-        from {width: 25%;}
-        to {width: 0%;}
+        from {width: 25%; display: block;}
+        to {width: 0%; display: none;}
       }
 
       @keyframes map-grow {
-        from {width: 75%;}
-        to {width: 100%;}
+        from {margin-left:25%; width: 75%;}
+        to {margin-left: 0%; width: 100%;}
       }
 
       #map {
@@ -44,8 +44,11 @@
       #toolpane-container {
         display: none;
       }
+      .tool {
+        padding: 1em;
+      }
       .pure-u-0 {
-        animation: toolpane-shrink 0.5s ease-out;
+        display: none;
       }
       .pure-u-1-animated {
         animation: map-grow 0.5s ease-out;
@@ -55,6 +58,10 @@
       }
       .pure-u-3-4 {
         animation: map-shrink 0.5s ease-out;
+      }
+
+      h2 {
+        margin: 0;
       }
     </style>
   </head>
@@ -80,9 +87,22 @@
           </ul>
         </div>
       </div>
-      <div id="toolpane-container">
-        <div id="start-end-point">Start End Point</div>
-        <div id="upload-gps-track">Upload GPS Track</div>
+      <div id="toolpane-container" class="pure-u-0">
+        <p style="margin: 0 0 0 10px;"><a href="#" onclick="hideToolpane()">Close</a></p>
+        <div id="start-end-point" class="tool">
+          <h2>Add By Start/End Point</h2>
+          <form class="pure-form pure-form-stacked">
+            <fieldset>
+              <legend>Specify Start/End Points and we'll interpolate the highways traveled based on Google Directions.</legend>
+              <label for="start-end-point-start">Starting Point:</label>
+              <input class="pure-input-1" id="start-end-point-start" />
+              <label for="start-end-point-end">Ending Point:</label>
+              <input class="pure-input-1" id="start-end-point-end" />
+              <button class="pure-button pure-button-primary">Calculate</button>
+            </fieldset>
+          </form>
+        </div>
+        <div id="upload-gps-track" class="tool">Upload GPS Track</div>
       </div>
       <div class="pure-u-1" id="map-container"><div id="map"></div></div>
     </div>
@@ -108,13 +128,13 @@
       function showToolpane(tool) {
         $("#map-container").removeClass("pure-u-1").addClass("pure-u-3-4");
         $("#toolpane-container").show().removeClass("pure-u-0").addClass("pure-u-1-4");
-        $("#toolpane-container").children().hide();
+        $(".tool").hide();
         $(`#${tool}`).show();
       }
 
       function hideToolpane() {
         $("#map-container").removeClass("pure-u-3-4").addClass("pure-u-1").addClass("pure-u-1-animated");
-        $("#toolpane-container").removeClass("pure-u-1-4").addClass("pure-u-0");
+        $("#toolpane-container").hide().removeClass("pure-u-1-4").addClass("pure-u-0");
       }
     </script>
   </body>
