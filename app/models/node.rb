@@ -5,6 +5,11 @@ class Node < ActiveRecord::Base
         find_by_id(id)
     end
 
+    # TODO: this is a horrible way to do this, I need to add an actual point to the Node model
+    def self.find_nearest(lat, lon)
+        Node.select("abs(#{lat}-lat)::bigint*abs(#{lat}-lat)::bigint+abs(#{lon}-lon)::bigint*abs(#{lon}-lon)::bigint as diff, *").order("diff").first
+    end
+
     def ways
         Way.where("nodes @> ?", "{#{id}}")
     end
